@@ -31,11 +31,12 @@ model Venda {
 }
 
 model VendaProduto {
-  id         String   @id @default(uuid())
-  produto    Produto  @relation(fields: [produtoId], references: [id])
-  produtoId  String
-  venda      Venda    @relation(fields: [vendaId], references: [id])
-  vendaId    String
-  qtd        Int
+  id          String  @id @default(uuid())
+  vendaId     String 
+  produtoId   String 
+  qtd         Int
   precoUnitario Float
+
+  venda       Venda   @relation(fields: [vendaId], references: [id])
+  produto     Produto @relation(fields: [produtoId], references: [id])
 }

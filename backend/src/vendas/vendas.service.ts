@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { CreateVendaDto } from './dto/create-venda.dto';
 
 @Injectable()
 export class VendasService {
@@ -34,5 +35,34 @@ export class VendasService {
 
   async deletarVenda(id: string) {
     return this.prisma.venda.delete({ where: { id } });
+  }
+
+  async createVenda(data: CreateVendaDto) {
+    return this.prisma.$transaction(async (prisma) => {
+      // Calcula o total da venda
+      const total = data.itens.reduce((acc, item) => acc + item.preco_unitario * item.qtd, 0);
+
+      // Cria a venda
+      const venda = await prisma.venda.create({
+        data: {
+          data: new Date(),
+          total,
+        },
+      });
+
+      // Insere os produtos relacionados
+      const vendaProdutos = data.itens.map((item) => ({
+        vendaId: String(venda.id), // Converte para string
+        produtoId: String(item.id_produto), // Converte para string
+        qtd: item.qtd,
+        precoUnitario: item.preco_unitario,
+      }));
+      
+      await prisma.vendaProduto.createMany({
+        data: vendaProdutos,
+      });
+
+      return { message: 'Venda cadastrada com sucesso!', venda };
+    });
   }
 }
