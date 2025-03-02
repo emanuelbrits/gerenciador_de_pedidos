@@ -1,4 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import 'dotenv/config';
@@ -9,6 +11,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
 
   const config = new DocumentBuilder()
     .setTitle('Gerenciador de Pedidos')

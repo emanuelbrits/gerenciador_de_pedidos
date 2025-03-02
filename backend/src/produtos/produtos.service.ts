@@ -62,24 +62,26 @@ export class ProdutosService {
   }
 
   async uploadImagem(file: Express.Multer.File): Promise<string | null> {
+    const randomNumber = Math.floor(1000 + Math.random() * 9000); // Gera um número de 4 dígitos aleatório
+    const fileName = `${file.originalname.split('.')[0]}-${randomNumber}.${file.originalname.split('.').pop()}`;
+
     const { data, error } = await this.supabase.storage
-        .from('produtos_imagens')  // Nome do bucket
-        .upload(`produtos/${file.originalname}`, file.buffer, {
-            contentType: file.mimetype,
-        });
+      .from('produtos_imagens')  // Nome do bucket
+      .upload(`produtos/${fileName}`, file.buffer, {
+        contentType: file.mimetype,
+      });
 
     if (error) {
-        console.error('Erro ao fazer upload:', error.message);
-        return null;
+      console.error('Erro ao fazer upload:', error.message);
+      return null;
     }
 
     const { data: publicUrlData } = this.supabase
-        .storage
-        .from('produtos_imagens')
-        .getPublicUrl(`produtos/${file.originalname}`);
+      .storage
+      .from('produtos_imagens')
+      .getPublicUrl(`produtos/${fileName}`);
 
-    console.log('URL gerada:', publicUrlData.publicUrl);
     return publicUrlData.publicUrl;
-}
+  }
 
 }

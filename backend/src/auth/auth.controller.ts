@@ -10,7 +10,6 @@ export class AuthController {
   @Post('register')
   @UseGuards(ApiKeyGuard)
   async register(@Body() body: { email: string; password: string }) {
-    console.log('Corpo da requisição:', body); // 👈 Depuração
     return this.authService.register(body.email, body.password);
   }
 
