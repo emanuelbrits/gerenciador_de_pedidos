@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import updateProduto from "../hooks/hooksProdutos";
 
@@ -20,6 +20,18 @@ const TabelaProdutos = ({ produtos, onEditarProduto }: TabelaProdutosProps) => {
     const [indexAtual, setIndexAtual] = useState<number | null>(null);
     const [novaFoto, setNovaFoto] = useState<File | undefined>(undefined);
 
+    useEffect(() => {
+        if (produtoAtual?.foto) {
+            carregarImagemInicial(produtoAtual.foto).then(setNovaFoto);
+        }
+    }, [produtoAtual]);
+
+    const carregarImagemInicial = async (url: string) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new File([blob], "foto_atual.jpg", { type: blob.type });
+    };
+
     const abrirModal = (index: number) => {
         setProdutoAtual(produtos[index]);
         setIndexAtual(index);
@@ -37,12 +49,21 @@ const TabelaProdutos = ({ produtos, onEditarProduto }: TabelaProdutosProps) => {
         if (produtoAtual && indexAtual !== null) {
             try {
                 const produtoAtualizado = await updateProduto.updateProduto(
-                    { nome: produtoAtual.nome, precoUnitario: produtoAtual.precoUnitario, id: produtoAtual.id },
+                    {
+                        nome: produtoAtual.nome,
+                        precoUnitario: produtoAtual.precoUnitario,
+                        id: produtoAtual.id
+                    },
                     novaFoto || (produtoAtual.foto as unknown as File)
                 );
 
                 if (produtoAtualizado) {
-                    onEditarProduto(indexAtual, produtoAtualizado, novaFoto);
+                    // Chamando a função vinda do Produtos.tsx para atualizar a lista
+                    onEditarProduto(indexAtual, {
+                        ...produtoAtualizado,
+                        foto: novaFoto ? URL.createObjectURL(novaFoto) : produtoAtual.foto
+                    });
+
                     fecharModal();
                 }
             } catch (error) {

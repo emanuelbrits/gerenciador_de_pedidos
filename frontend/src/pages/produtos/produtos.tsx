@@ -9,13 +9,26 @@ const Produtos = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setProdutos(await fetchProdutos.fetchProdutos());
+            try {
+                const produtosData = await fetchProdutos.fetchProdutos();
+                setProdutos(produtosData);
+            } catch (error) {
+                console.error("Erro ao buscar produtos:", error);
+            }
         };
         fetchData();
     }, []);
 
     const handleAdicionarProduto = (novoProduto: any) => {
-        setProdutos([...produtos, novoProduto]);
+        setProdutos((prevProdutos) => [...prevProdutos, novoProduto]);
+    };
+
+    const handleEditarProduto = (index: number, produtoAtualizado: any) => {
+        setProdutos((prevProdutos) => {
+            const novosProdutos = [...prevProdutos];
+            novosProdutos[index] = produtoAtualizado;
+            return novosProdutos;
+        });
     };
 
     return (
@@ -31,7 +44,7 @@ const Produtos = () => {
                     width: '100vw'
                 }}
             >
-                <ProdutoCard produtos={produtos} onAdicionarProduto={handleAdicionarProduto} />
+                <ProdutoCard produtos={produtos} onAdicionarProduto={handleAdicionarProduto} onEditarProduto={handleEditarProduto} />
             </div>
         </div>
     );
