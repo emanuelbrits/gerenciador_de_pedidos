@@ -13,10 +13,11 @@ interface Produto {
 interface ProdutoCardProps {
     produtos: Produto[];
     onAdicionarProduto: (novoProduto: Produto) => void;
-    onEditarProduto: (index: number, produtoAtualizado: Produto) => void; // Adicionando a prop
+    onEditarProduto: (index: number, produtoAtualizado: Produto) => void;
+    onRemoverProduto: (index: number) => void;
 }
 
-const ProdutoCard = ({ produtos, onAdicionarProduto, onEditarProduto }: ProdutoCardProps) => {
+const ProdutoCard = ({ produtos, onAdicionarProduto, onEditarProduto, onRemoverProduto }: ProdutoCardProps) => {
     const [showModal, setShowModal] = useState(false);
     const [nome, setNome] = useState("");
     const [preco, setPreco] = useState("");
@@ -68,7 +69,7 @@ const ProdutoCard = ({ produtos, onAdicionarProduto, onEditarProduto }: ProdutoC
             </div>
 
             {/* Tabela de produtos filtrados */}
-            <TabelaProdutos produtos={produtos} onEditarProduto={onEditarProduto} />
+            <TabelaProdutos produtos={produtosFiltrados} onEditarProduto={onEditarProduto} onRemoverProduto={onRemoverProduto}/>
 
             {/* Modal de Adição */}
             {showModal && (

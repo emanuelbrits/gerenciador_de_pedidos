@@ -29,7 +29,11 @@ const Produtos = () => {
             novosProdutos[index] = produtoAtualizado;
             return novosProdutos;
         });
-    };
+    };  
+
+    const handleRemoverProduto = (index: number) => {
+        setProdutos((prevProdutos) => prevProdutos.filter((_, i) => i !== index));
+    };    
 
     return (
         <div>
@@ -44,7 +48,7 @@ const Produtos = () => {
                     width: '100vw'
                 }}
             >
-                <ProdutoCard produtos={produtos} onAdicionarProduto={handleAdicionarProduto} onEditarProduto={handleEditarProduto} />
+                <ProdutoCard produtos={produtos} onAdicionarProduto={handleAdicionarProduto} onEditarProduto={handleEditarProduto} onRemoverProduto={handleRemoverProduto}/>
             </div>
         </div>
     );

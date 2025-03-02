@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import updateProduto from "../hooks/hooksProdutos";
+import deleteProduto from "../hooks/hooksProdutos";
+import { FaTrash } from "react-icons/fa";
 
 interface Produto {
     id: string,
@@ -12,9 +14,10 @@ interface Produto {
 interface TabelaProdutosProps {
     produtos: Produto[];
     onEditarProduto: (index: number, produtoAtualizado: Produto, novaFoto?: File) => void;
+    onRemoverProduto: (index: number) => void;
 }
 
-const TabelaProdutos = ({ produtos, onEditarProduto }: TabelaProdutosProps) => {
+const TabelaProdutos = ({ produtos, onEditarProduto, onRemoverProduto }: TabelaProdutosProps) => {
     const [modalAberto, setModalAberto] = useState(false);
     const [produtoAtual, setProdutoAtual] = useState<Produto | null>(null);
     const [indexAtual, setIndexAtual] = useState<number | null>(null);
@@ -72,6 +75,20 @@ const TabelaProdutos = ({ produtos, onEditarProduto }: TabelaProdutosProps) => {
         }
     };
 
+    const removerProduto = async (index: number) => {
+        const confirmacao = window.confirm("Deseja realmente excluir este produto?");
+
+        if (confirmacao) {
+            try {
+                const produtoRemovido = await deleteProduto.deleteProduto(produtos[index].id);
+                onRemoverProduto(index);
+                return produtoRemovido;
+            } catch (error) {
+                console.error("Erro ao remover produto:", error);
+            }
+        }
+    }
+
     return (
         <>
             <table className="w-full border-collapse">
@@ -91,9 +108,14 @@ const TabelaProdutos = ({ produtos, onEditarProduto }: TabelaProdutosProps) => {
                             </td>
                             <td>{produto.nome}</td>
                             <td>R$ {produto.precoUnitario.toFixed(2)}</td>
-                            <td className="p-2">
-                                <button className="btn ml-2" onClick={() => abrirModal(index)}>
+                            <td className="">
+                                <button className="btn " onClick={() => abrirModal(index)}>
                                     <MdEdit />
+                                </button>
+                            </td>
+                            <td>
+                                <button className="btn btn-error" onClick={() => removerProduto(index)}>
+                                    <FaTrash />
                                 </button>
                             </td>
                         </tr>

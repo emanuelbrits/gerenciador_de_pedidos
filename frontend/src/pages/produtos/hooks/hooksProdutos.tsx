@@ -66,4 +66,25 @@ const updateProduto = async (produto: { nome: string; precoUnitario: number, id:
     }
 };
 
-export default { fetchProdutos, createProduto, updateProduto };
+const deleteProduto = async (id: string) => {
+
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/produtos/${id}`, {
+            method: "DELETE",
+            headers: {
+                "x-api-key": import.meta.env.VITE_API_KEY,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao excluir produto");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erro ao excluir produto:", error);
+        alert("Erro ao excluir produto");
+    }
+};
+
+export default { fetchProdutos, createProduto, updateProduto, deleteProduto };
