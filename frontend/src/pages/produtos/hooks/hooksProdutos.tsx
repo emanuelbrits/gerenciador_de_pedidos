@@ -37,5 +37,33 @@ const createProduto = async (produto: { nome: string; precoUnitario: number }, f
     }
 };
 
+const updateProduto = async (produto: { nome: string; precoUnitario: number, id: string }, foto: File) => {
+    const formData = new FormData();
+    formData.append("nome", produto.nome);
+    formData.append("precoUnitario", produto.precoUnitario.toString());
 
-export default { fetchProdutos, createProduto };
+    if (foto) {
+        formData.append("file", foto);
+    }
+
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/produtos/${produto.id}`, {
+            method: "PUT",
+            headers: {
+                "x-api-key": import.meta.env.VITE_API_KEY,
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao atualizar produto");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Erro ao atualizar produto:", error);
+        alert("Erro ao atualizar produto");
+    }
+};
+
+export default { fetchProdutos, createProduto, updateProduto };

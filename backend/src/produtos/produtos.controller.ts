@@ -18,6 +18,17 @@ export class ProdutosController {
     return this.produtosService.criarProduto(data, file);
   }
 
+  @Put(':id')
+  @UseGuards(ApiKeyGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async atualizar(
+    @Param('id') id: string,
+    @Body() data: Prisma.ProdutoCreateInput,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.produtosService.atualizarProduto(id ,data, file);
+  }
+
   @Get()
   @UseGuards(ApiKeyGuard)
   listar() {
@@ -28,12 +39,6 @@ export class ProdutosController {
   @UseGuards(ApiKeyGuard)
   obter(@Param('id') id: string) {
     return this.produtosService.obterProdutoPorId(id);
-  }
-
-  @Put(':id')
-  @UseGuards(ApiKeyGuard)
-  atualizar(@Param('id') id: string, @Body() data: Produto) {
-    return this.produtosService.atualizarProduto(id, data);
   }
 
   @Delete(':id')

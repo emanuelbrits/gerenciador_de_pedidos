@@ -1,8 +1,10 @@
 import { useState } from "react";
 import TabelaProdutos from "./tabelaProdutos";
-import createProdutos from "./hooksProdutos";
+import createProdutos from "../hooks/hooksProdutos";
+import { FaPlus, FaSearch } from "react-icons/fa";
 
 interface Produto {
+    id: string;
     foto: string;
     nome: string;
     precoUnitario: number;
@@ -18,17 +20,19 @@ const ProdutoCard = ({ produtos, onAdicionarProduto }: ProdutoCardProps) => {
     const [nome, setNome] = useState("");
     const [preco, setPreco] = useState("");
     const [foto, setFoto] = useState<File | null>(null);
+    const [termoBusca, setTermoBusca] = useState("");
 
+    // Função para salvar novo produto
     const handleSalvar = async () => {
         if (!nome || !preco || !foto) {
             alert("Preencha todos os campos!");
             return;
         }
-    
+
         const novoProduto = { nome, precoUnitario: parseFloat(preco) };
-            
+
         const produtoCriado = await createProdutos.createProduto(novoProduto, foto);
-    
+
         if (produtoCriado) {
             onAdicionarProduto(produtoCriado);
             setShowModal(false);
@@ -37,20 +41,35 @@ const ProdutoCard = ({ produtos, onAdicionarProduto }: ProdutoCardProps) => {
             setFoto(null);
         }
     };
-    
+
+    // Filtrar produtos pelo nome digitado
+    const produtosFiltrados = produtos.filter((produto) =>
+        produto.nome.toLowerCase().includes(termoBusca.toLowerCase())
+    );
 
     return (
         <div className="bg-white p-8 rounded-lg shadow-2xl text-black text-center max-w-4xl w-full max-h-[500px] overflow-y-auto">
-            <button
-                className="btn btn-info text-3xl mb-4"
-                onClick={() => setShowModal(true)}
-            >
-                Adicionar produto
-            </button>
+            <div className="flex justify-between items-center mb-4">
+                {/* Campo de busca */}
+                <div className="relative w-1/2">
+                    <input
+                        type="text"
+                        placeholder="Buscar produto..."
+                        value={termoBusca}
+                        onChange={(e) => setTermoBusca(e.target.value)}
+                        className="input input-bordered w-full pl-10 border-black bg-white text-black"
+                    />
+                    <FaSearch className="absolute left-3 top-3 text-gray-500" />
+                </div>
+                <button className="btn btn-info text-3xl" onClick={() => setShowModal(true)}>
+                    <FaPlus />
+                </button>
+            </div>
 
-            <TabelaProdutos produtos={produtos} />
+            {/* Tabela de produtos filtrados */}
+            <TabelaProdutos produtos={produtosFiltrados} onEditarProduto={() => {}} />
 
-            {/* Modal */}
+            {/* Modal de Adição */}
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-xs">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full border">

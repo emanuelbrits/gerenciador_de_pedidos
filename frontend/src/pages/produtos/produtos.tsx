@@ -1,6 +1,6 @@
 import TopBar from "../../components/TopBar";
 import fundo_login from '../../assets/fundo_login.jpg';
-import ProdutoCard from "./hooks/produtoCard";
+import ProdutoCard from "./components/produtoCard";
 import { useEffect, useState } from "react";
 import fetchProdutos from "./hooks/hooksProdutos";
 

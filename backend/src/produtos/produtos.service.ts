@@ -45,7 +45,8 @@ export class ProdutosService {
   }
 
   async atualizarProduto(id: string, data: Prisma.ProdutoUpdateInput, file?: Express.Multer.File) {
-    let imageUrl = data.foto as string | null | undefined;
+    
+    let imageUrl: string | null = null;
 
     if (file) {
       imageUrl = await this.uploadImagem(file);
@@ -53,7 +54,7 @@ export class ProdutosService {
 
     return this.prisma.produto.update({
       where: { id },
-      data: { ...data, foto: imageUrl },
+      data: { nome: data.nome, precoUnitario: parseFloat(data.precoUnitario as unknown as string), foto: imageUrl },
     });
   }
 
