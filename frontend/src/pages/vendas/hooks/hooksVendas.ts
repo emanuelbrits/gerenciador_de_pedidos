@@ -4,6 +4,7 @@ interface Produto {
     id_produto: string,
     qtd: number,
     preco_unitario: number;
+    foto: string;
 }
 
 const fetchVendas = async () => {
@@ -23,6 +24,7 @@ const createVenda = async (venda: { cliente: string; itens: Produto[], data: str
                 id_produto: produto.id_produto,  // Corrigindo o nome do campo
                 qtd: produto.qtd,
                 preco_unitario: produto.preco_unitario,  // Garantindo que é número
+                foto: produto.foto
             })),
             data: venda.data
         };

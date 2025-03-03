@@ -11,6 +11,9 @@ class VendaProdutoDto {
 
   @IsNumber()
   preco_unitario: number;
+
+  @IsString()
+  foto: string;
 }
 
 export class CreateVendaDto {

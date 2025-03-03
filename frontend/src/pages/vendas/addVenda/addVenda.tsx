@@ -65,7 +65,8 @@ const AddVenda = () => {
             itens: produtosVenda.map(produto => ({
                 id_produto: produto.id,
                 qtd: produto.quantidade,
-                preco_unitario: produto.precoUnitario
+                preco_unitario: produto.precoUnitario,
+                foto: produto.foto
             })),
             data: new Date().toISOString()
         };

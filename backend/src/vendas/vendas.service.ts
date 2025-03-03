@@ -56,6 +56,7 @@ export class VendasService {
         produtoId: String(item.id_produto), // Converte para string
         qtd: item.qtd,
         precoUnitario: item.preco_unitario,
+        foto: item.foto,
       }));
       
       await prisma.vendaProduto.createMany({

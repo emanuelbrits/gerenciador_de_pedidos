@@ -37,6 +37,7 @@ model VendaProduto {
   produtoId   String 
   qtd         Int
   precoUnitario Float
+  foto        String
 
   venda       Venda   @relation(fields: [vendaId], references: [id])
   produto     Produto @relation(fields: [produtoId], references: [id])
