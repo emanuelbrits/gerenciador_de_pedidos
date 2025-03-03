@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { jwtDecode } from 'jwt-decode';
-import { BrowserRouter, Navigate, Route, Router, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Login from './pages/login/login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/home/home';
