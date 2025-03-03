@@ -59,7 +59,7 @@ const AddVenda = () => {
             alert("Preencha todos os campos antes de registrar a venda.");
             return;
         }
-    
+
         const venda = {
             cliente,
             itens: produtosVenda.map(produto => ({
@@ -70,13 +70,13 @@ const AddVenda = () => {
             })),
             data: new Date().toISOString()
         };
-    
+
         try {
             const vendaCriada = await createVenda.createVenda(venda);
-    
+
             if (vendaCriada && vendaCriada.venda && vendaCriada.venda.id) {
                 alert("Venda registrada com sucesso!");
-    
+
                 // Redirecionar para a página de detalhes da venda
                 navigate(`/vendas/${vendaCriada.venda.id}`);
             } else {
@@ -120,11 +120,14 @@ const AddVenda = () => {
                         onChange={(e) => setProdutoSelecionado(e.target.value)}
                     >
                         <option value="">Selecione um produto</option>
-                        {produtos.map((produto) => (
-                            <option key={produto.id} value={produto.id}>
-                                {produto.nome} - R$ {produto.precoUnitario.toFixed(2)}
-                            </option>
-                        ))}
+                        {produtos
+                            .slice() // Evita modificar o array original
+                            .sort((a, b) => a.nome.localeCompare(b.nome)) // Ordena alfabeticamente
+                            .map((produto) => (
+                                <option key={produto.id} value={produto.id}>
+                                    {produto.nome} - R$ {produto.precoUnitario.toFixed(2)}
+                                </option>
+                            ))}
                     </select>
 
                     <button
