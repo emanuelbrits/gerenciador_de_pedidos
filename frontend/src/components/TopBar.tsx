@@ -17,7 +17,7 @@ const TopBar = () => {
         </button>
       </div>
       <div className="flex-none">
-        <button className="btn bg-blue-600 text-white mr-2" onClick={() => navigate("/produtos")}>
+        <button className="btn bg-amber-600 text-white mr-2" onClick={() => navigate("/produtos")}>
           Produtos
         </button>
         <button className="btn bg-green-600 text-white mr-2" onClick={() => navigate("/vendas")}>

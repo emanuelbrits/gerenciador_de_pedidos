@@ -27,6 +27,7 @@ model Venda {
   id    String   @id @default(uuid())
   data  DateTime @default(now())
   total Float
+  cliente String
   produtos VendaProduto[]
 }
 

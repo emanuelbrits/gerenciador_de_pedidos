@@ -7,10 +7,6 @@ import { CreateVendaDto } from './dto/create-venda.dto';
 export class VendasService {
   constructor(private prisma: PrismaService) {}
 
-  async criarVenda(data: Prisma.VendaCreateInput) {
-    return this.prisma.venda.create({ data });
-  }
-
   async listarVendas() {
     return this.prisma.venda.findMany({
       include: { produtos: true }, // Inclui os produtos vendidos
@@ -34,8 +30,11 @@ export class VendasService {
   }
 
   async deletarVenda(id: string) {
-    return this.prisma.venda.delete({ where: { id } });
-  }
+    return this.prisma.$transaction([
+      this.prisma.vendaProduto.deleteMany({ where: { vendaId: id } }), // Exclui os itens da venda
+      this.prisma.venda.delete({ where: { id } }) // Agora exclui a venda
+    ]);
+  }  
 
   async createVenda(data: CreateVendaDto) {
     return this.prisma.$transaction(async (prisma) => {
@@ -47,6 +46,7 @@ export class VendasService {
         data: {
           data: new Date(),
           total,
+          cliente: data.cliente
         },
       });
 

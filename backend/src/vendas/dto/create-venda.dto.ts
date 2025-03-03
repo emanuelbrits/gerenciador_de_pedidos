@@ -18,4 +18,6 @@ export class CreateVendaDto {
   @ValidateNested({ each: true })
   @Type(() => VendaProdutoDto)
   itens: VendaProdutoDto[];
+  @IsString()
+  cliente: string;
 }
