@@ -109,7 +109,7 @@ const TabelaProdutos = ({ produtos, onEditarProduto, onRemoverProduto }: TabelaP
                             <td>{produto.nome}</td>
                             <td>R$ {produto.precoUnitario.toFixed(2)}</td>
                             <td className="">
-                                <button className="btn " onClick={() => abrirModal(index)}>
+                                <button className="btn ml-2 mr-2" onClick={() => abrirModal(index)}>
                                     <MdEdit />
                                 </button>
                             </td>
