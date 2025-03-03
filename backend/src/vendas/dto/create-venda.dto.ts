@@ -14,6 +14,9 @@ class VendaProdutoDto {
 
   @IsString()
   foto: string;
+
+  @IsString()
+  nome: string;
 }
 
 export class CreateVendaDto {

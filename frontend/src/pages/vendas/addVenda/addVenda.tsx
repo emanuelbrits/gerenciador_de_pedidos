@@ -66,7 +66,8 @@ const AddVenda = () => {
                 id_produto: produto.id,
                 qtd: produto.quantidade,
                 preco_unitario: produto.precoUnitario,
-                foto: produto.foto
+                foto: produto.foto,
+                nome: produto.nome,
             })),
             data: new Date().toISOString()
         };
